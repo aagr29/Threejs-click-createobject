@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Three.js</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            body {
+                overflow: hidden;
+                margin: 0px;
+            }
+        </style>
+
+        <!-- Import maps polyfill -->
+        <!-- Remove this when import maps will be widely supported -->
+        <script
+            async
+            src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"
+        ></script>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "three": "./build/three.module.js"
+                }
+            }
+        </script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <!-- Vendor JS-->
+        <script src="vendor/select2/select2.min.js"></script>
+        <script src="vendor/datepicker/moment.min.js"></script>
+        <script src="vendor/datepicker/daterangepicker.js"></script>
+        <script src="https://code.highcharts.com/highcharts.src.js"></script>
+
+    </head>
+<script>
+// get poles coordinates
+var xp=[];
+var yp=[];
+var zp=[];
+$.get("/get_coordinates", function(result) {
+                var data_x = result['x'];
+                var data_y = result['y'];
+                var data_z = result['z'];
+for(let i=0; i< data_x.length; i++) {
+    xp[i]=data_x[i]
+    yp[i]=data_y[i]  
+    zp[i]=data_z[i]
+}})
+</script>
+<script>
+var xc1= [];
+var yc1= [];
+var zc1= [];
+var xc2= [];
+var yc2= [];
+var zc2= [];
+var xc3= [];
+var yc3= [];
+var zc3= [];
+var xc4= [];
+var yc4= [];
+var zc4= [];
+var xc5= [];
+var yc5= [];
+var zc5= [];
+var xc6= [];
+var yc6= [];
+var zc6= [];
+var xc7= [];
+var yc7= [];
+var zc7= [];
+var xc8= [];
+var yc8= [];
+var zc8= [];
+var xc9= [];
+var yc9= [];
+var zc9= [];
+var xc10= [];
+var yc10= [];
+var zc10= [];
+var xc11= [];
+var yc11= [];
+var zc11= [];
+// get conductor coordinates
+$.get("/get_coordinates_conductors", function(result) {
+                var data_xc1 = result['x1'];
+                var data_yc1 = result['y1'];
+                var data_zc1 = result['z1'];
+                var data_xc2 = result['x2'];
+                var data_yc2 = result['y2'];
+                var data_zc2 = result['z2'];
+                var data_xc3 = result['x3'];
+                var data_yc3 = result['y3'];
+                var data_zc3 = result['z3'];
+                var data_xc4 = result['x4'];
+                var data_yc4 = result['y4'];
+                var data_zc4 = result['z4'];
+                var data_xc5 = result['x5'];
+                var data_yc5 = result['y5'];
+                var data_zc5 = result['z5'];
+                var data_xc6 = result['x6'];
+                var data_yc6 = result['y6'];
+                var data_zc6 = result['z6'];
+                var data_xc7 = result['x7'];
+                var data_yc7 = result['y7'];
+                var data_zc7 = result['z7'];
+                var data_xc8 = result['x8'];
+                var data_yc8 = result['y8'];
+                var data_zc8 = result['z8'];
+                var data_xc9 = result['x9'];
+                var data_yc9 = result['y9'];
+                var data_zc9 = result['z9'];
+                var data_xc10 = result['x10'];
+                var data_yc10 = result['y10'];
+                var data_zc10 = result['z10'];
+                var data_xc11 = result['x11'];
+                var data_yc11 = result['y11'];
+                var data_zc11 = result['z11'];
+                console.log(data_xc1);
+for (let j=0; j< data_xc1.length; j++) {
+        xc1[j]=data_xc1[j]
+        yc1[j]=data_yc1[j]  
+        zc1[j]=data_zc1[j]
+        xc2[j]=data_xc2[j]
+        yc2[j]=data_yc2[j]  
+        zc2[j]=data_zc2[j]
+        xc3[j]=data_xc3[j]
+        yc3[j]=data_yc3[j]  
+        zc3[j]=data_zc3[j]
+        xc4[j]=data_xc4[j]
+        yc4[j]=data_yc4[j]  
+        zc4[j]=data_zc4[j]
+        xc5[j]=data_xc5[j]
+        yc5[j]=data_yc5[j]  
+        zc5[j]=data_zc5[j]
+        xc6[j]=data_xc6[j]
+        yc6[j]=data_yc6[j]  
+        zc6[j]=data_zc6[j]
+        xc7[j]=data_xc7[j]
+        yc7[j]=data_yc7[j]  
+        zc7[j]=data_zc7[j]
+        xc8[j]=data_xc8[j]
+        yc8[j]=data_yc8[j]  
+        zc8[j]=data_zc8[j]
+        xc9[j]=data_xc9[j]
+        yc9[j]=data_yc9[j]  
+        zc9[j]=data_zc9[j]
+        xc10[j]=data_xc10[j]
+        yc10[j]=data_yc10[j]  
+        zc10[j]=data_zc10[j]
+        xc11[j]=data_xc11[j]
+        yc11[j]=data_yc11[j]  
+        zc11[j]=data_zc11[j]      
+}})
+</script>
+<body>   
+<script type="module" >
+import * as THREE from "//cdn.skypack.dev/three@0.134?min";
+import { OrbitControls } from "//cdn.skypack.dev/three@0.134/examples/jsm/controls/OrbitControls?min";
+
+const renderer = new THREE.WebGLRenderer();
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+  45,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+
+const orbit = new OrbitControls(camera, renderer.domElement);
+
+camera.position.set(0, 6, 6);
+orbit.update();
+
+const ambientLight = new THREE.AmbientLight(0x333333);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+scene.add(directionalLight);
+directionalLight.position.set(0, 50, 0);
+
+const helper = new THREE.AxesHelper(20);
+scene.add(helper);
+
+const mouse = new THREE.Vector2();
+const intersectionPoint = new THREE.Vector3();
+const planeNormal = new THREE.Vector3();
+const plane = new THREE.Plane();
+const raycaster = new THREE.Raycaster();
+
+window.addEventListener("click", function (e) {
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  planeNormal.copy(camera.position).normalize();
+  plane.setFromNormalAndCoplanarPoint(planeNormal, scene.position);
+  raycaster.setFromCamera(mouse, camera);
+  raycaster.ray.intersectPlane(plane, intersectionPoint);
+  const sphereMesh = new THREE.Mesh(
+    new THREE.SphereGeometry(0.125, 30, 30),
+    new THREE.MeshStandardMaterial({
+      color: 0xffea00,
+      metalness: 0,
+      roughness: 0
+    })
+  );
+  scene.add(sphereMesh);
+  sphereMesh.position.copy(intersectionPoint);
+});
+
+function animate() {
+  renderer.render(scene, camera);
+}
+
+renderer.setAnimationLoop(animate);
+
+window.addEventListener("resize", function () {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+        </script>
+    </body>
+</html>
