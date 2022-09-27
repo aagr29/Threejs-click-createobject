@@ -33,7 +33,7 @@
         <script src="https://code.highcharts.com/highcharts.src.js"></script>
 
     </head>
-<script>
+<!-- <script>
 // get poles coordinates
 var xp=[];
 var yp=[];
@@ -153,7 +153,7 @@ for (let j=0; j< data_xc1.length; j++) {
         yc11[j]=data_yc11[j]  
         zc11[j]=data_zc11[j]      
 }})
-</script>
+</script> -->
 <body>   
 <script type="module" >
 import * as THREE from "//cdn.skypack.dev/three@0.134?min";
@@ -194,7 +194,14 @@ const intersectionPoint = new THREE.Vector3();
 const planeNormal = new THREE.Vector3();
 const plane = new THREE.Plane();
 const raycaster = new THREE.Raycaster();
-
+var clickcount=0;
+var intersects;
+var controlPointsx=[];
+var controlPointsy=[];
+var controlPointsz=[];
+var x=[];
+var y=[];
+var z=[];
 window.addEventListener("click", function (e) {
   mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -202,16 +209,42 @@ window.addEventListener("click", function (e) {
   plane.setFromNormalAndCoplanarPoint(planeNormal, scene.position);
   raycaster.setFromCamera(mouse, camera);
   raycaster.ray.intersectPlane(plane, intersectionPoint);
-  const sphereMesh = new THREE.Mesh(
-    new THREE.SphereGeometry(0.125, 30, 30),
-    new THREE.MeshStandardMaterial({
-      color: 0xffea00,
-      metalness: 0,
-      roughness: 0
-    })
-  );
-  scene.add(sphereMesh);
-  sphereMesh.position.copy(intersectionPoint);
+  
+  x[0]=intersectionPoint.x
+  y[0]=intersectionPoint.y
+  z[0]=intersectionPoint.z
+  console.log(x.length)
+  if (x.length>0){
+    var x1=x[0];
+    var y1=y[0];
+    var z1=z[0];
+    
+
+    console.log(x1);
+    console.log(clickcount);
+    if (clickcount <= 2){
+      controlPointsx[clickcount]=x1;
+      controlPointsy[clickcount]=y1;
+      controlPointsz[clickcount]=z1;
+      clickcount++ ;
+      console.log(controlPointsx);
+      console.log(controlPointsy);
+      console.log(controlPointsz);
+    } else {
+        var curveRoadNo=new THREE.CatmullRomCurve3([
+          new THREE.Vector3( controlPointsx[0],controlPointsy[0],controlPointsz[0]),
+          new THREE.Vector3( controlPointsx[1],controlPointsy[1],controlPointsz[1]), 
+          new THREE.Vector3( controlPointsx[2],controlPointsy[2],controlPointsz[2])])
+        var geometry_c = new THREE.TubeGeometry( curveRoadNo, 64, 0.02, 8, false );
+        var material_c = new THREE.PointsMaterial({ color: 0xFFFFFF, size: 0.1 });
+        var mesh_c= new THREE.Points( geometry_c,material_c);
+        scene.add(mesh_c);
+        controlPointsx=[];
+        controlPointsy=[];
+        controlPointsz=[];  
+        clickcount=0;
+    }
+  }
 });
 
 function animate() {
