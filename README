@@ -1,6 +1,6 @@
 to start:
 git clone https://github.com/cognitive-earth/Threejs-app.git
-cd Threejs-app
+cd Threejs-click-createobject
 npm start
 Visit http://127.0.0.1:3000
 
